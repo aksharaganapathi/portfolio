@@ -1,0 +1,60 @@
+/* 1. Imports */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&family=JetBrains+Mono:wght@400;500&display=swap');
+@import "tailwindcss";
+@config "../tailwind.config.js";
+
+/* 2. The Modern "Mesh" Gradient Background */
+body {
+  background-color: #f8fafc;
+  min-height: 100vh;
+  /* Complex mesh of colors */
+  background-image: 
+      radial-gradient(at 0% 0%, hsla(253,16%,90%,1) 0, transparent 50%), 
+      radial-gradient(at 50% 0%, hsla(225,39%,90%,1) 0, transparent 50%), 
+      radial-gradient(at 100% 0%, hsla(339,49%,90%,1) 0, transparent 50%),
+      radial-gradient(at 80% 50%, hsla(260, 60%, 90%, 1) 0, transparent 50%),
+      radial-gradient(at 0% 100%, hsla(190, 50%, 90%, 1) 0, transparent 50%);
+  background-attachment: fixed;
+}
+
+/* 4. PREMIUM GLASSMORPHISM (Glitch-Free) */
+.glass-panel {
+    /* Base: Very transparent white */
+    background-color: rgba(255, 255, 255, 0.3);
+    
+    /* The Blur: High value for "frosted" look */
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    
+    /* The Border: Crisp white line */
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    
+    /* Shadow: Very subtle to lift it off the page */
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
+    
+    /* Transition: Smooth color and transform */
+    transition: background-color 0.3s ease, transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.glass-panel:hover {
+    /* More opaque white on hover */
+    background-color: rgba(255, 255, 255, 0.65);
+    
+    /* Brighter border */
+    border-color: rgba(255, 255, 255, 0.9);
+    
+    /* Slight Lift */
+    transform: translateY(-2px);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+}
+
+/* Utilities */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+.hover-thick { position: relative; display: inline-block; }
+.hover-thick::after {
+    content: ''; position: absolute; width: 100%; transform: scaleX(0); height: 3px;
+    bottom: -2px; left: 0; background-color: #4f46e5; transform-origin: bottom right; transition: transform 0.2s ease-out;
+}
+.hover-thick:hover::after { transform: scaleX(1); transform-origin: bottom left; }

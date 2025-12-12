@@ -35,14 +35,33 @@ The react2shell vulnerability (CVE-2025-23184) is a security issue discovered in
 2. **No User Input**: The application is a static portfolio with no forms or user input fields
 3. **Hardcoded Content**: All content is hardcoded or derived from static arrays, eliminating injection risks
 4. **Email Obfuscation**: Email address is constructed client-side to prevent harvesting
+5. **Security Headers**: Development server includes security headers (see production notes below)
 
-### 🔒 Recommended Enhancements
+### 🔒 Production Deployment Security
 
-While not vulnerable to react2shell, the following security enhancements are recommended:
+When deploying to production, ensure the following security headers are configured at the web server or CDN level:
 
-1. **Content Security Policy (CSP)**: Add CSP headers to prevent XSS attacks
-2. **Security Headers**: Add additional security headers via Vite configuration
-3. **Subresource Integrity**: Consider adding SRI for any external resources
+```
+Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self';
+X-Frame-Options: DENY
+X-Content-Type-Options: nosniff
+Referrer-Policy: strict-origin-when-cross-origin
+Strict-Transport-Security: max-age=31536000; includeSubDomains
+```
+
+**Important Notes:**
+- Remove `'unsafe-inline'` from CSP in production builds
+- Configure headers at the web server level (nginx, Apache, Cloudflare, Vercel, etc.)
+- The headers in `vite.config.js` only apply to the development server
+
+### 📋 Additional Recommendations
+
+For continued security best practices:
+
+1. **Stricter CSP in Production**: Use nonces or hashes instead of 'unsafe-inline'
+2. **Regular Dependency Updates**: Keep React and all dependencies up to date
+3. **HTTPS Only**: Ensure production deployment uses HTTPS
+4. **Security Monitoring**: Regularly run `npm audit` and monitor security advisories
 
 ## Dependencies
 

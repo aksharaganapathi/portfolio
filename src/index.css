@@ -3,49 +3,86 @@
 @import "tailwindcss";
 @config "../tailwind.config.js";
 
-/* 2. The Modern "Mesh" Gradient Background */
+/* 2. Animations */
+@keyframes gradient-move {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+:root {
+    transition: background-color 0.5s ease, color 0.5s ease;
+}
+
+/* 3. LIGHT MODE BACKGROUND (Animated) */
 body {
   background-color: #f8fafc;
   min-height: 100vh;
-  /* Complex mesh of colors */
+  /* Larger size (400%) allows us to pan around the gradient */
+  background-size: 400% 400%;
+  animation: gradient-move 15s ease infinite;
+  
   background-image: 
       radial-gradient(at 0% 0%, hsla(253,16%,90%,1) 0, transparent 50%), 
       radial-gradient(at 50% 0%, hsla(225,39%,90%,1) 0, transparent 50%), 
       radial-gradient(at 100% 0%, hsla(339,49%,90%,1) 0, transparent 50%),
       radial-gradient(at 80% 50%, hsla(260, 60%, 90%, 1) 0, transparent 50%),
       radial-gradient(at 0% 100%, hsla(190, 50%, 90%, 1) 0, transparent 50%);
-  background-attachment: fixed;
+  background-attachment: fixed; 
 }
 
-/* 4. PREMIUM GLASSMORPHISM (Glitch-Free) */
+/* 4. DARK MODE BACKGROUND (Animated) */
+.dark body {
+  background-color: #020617; 
+  background-size: 400% 400%;
+  background-image: 
+      radial-gradient(at 0% 0%, hsla(253,16%,10%,1) 0, transparent 50%), 
+      radial-gradient(at 50% 0%, hsla(225,39%,10%,1) 0, transparent 50%), 
+      radial-gradient(at 100% 0%, hsla(339,49%,10%,1) 0, transparent 50%);
+}
+
+/* 6. GLASSMORPHISM */
 .glass-panel {
-    /* Base: Very transparent white */
     background-color: rgba(255, 255, 255, 0.3);
-    
-    /* The Blur: High value for "frosted" look */
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
-    
-    /* The Border: Crisp white line */
     border: 1px solid rgba(255, 255, 255, 0.5);
-    
-    /* Shadow: Very subtle to lift it off the page */
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
-    
-    /* Transition: Smooth color and transform */
-    transition: background-color 0.3s ease, transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    transition: all 0.3s ease;
 }
 
 .glass-panel:hover {
-    /* More opaque white on hover */
     background-color: rgba(255, 255, 255, 0.65);
-    
-    /* Brighter border */
     border-color: rgba(255, 255, 255, 0.9);
-    
-    /* Slight Lift */
     transform: translateY(-2px);
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+}
+
+.dark .glass-panel {
+    background-color: rgba(15, 23, 42, 0.4); 
+    border: 1px solid rgba(255, 255, 255, 0.08); 
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+}
+
+.dark .glass-panel:hover {
+    background-color: rgba(30, 41, 59, 0.6); 
+    border-color: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+}
+
+/* 7. NEW: Multi-line Highlighter Fix */
+.marker-text {
+    /* Use 'clone' so the padding/background applies to start/end of EACH line */
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
+    padding: 4px 6px;
+    border-radius: 4px;
+    background-color: rgba(79, 70, 229, 0.2); /* Indigo-20 */
+    color: #4f46e5; /* Indigo Text */
+}
+.dark .marker-text {
+    background-color: rgba(99, 102, 241, 0.2); /* Indigo-400 at 20% */
+    color: #818cf8; /* Indigo-400 Text */
 }
 
 /* Utilities */
@@ -57,4 +94,5 @@ body {
     content: ''; position: absolute; width: 100%; transform: scaleX(0); height: 3px;
     bottom: -2px; left: 0; background-color: #4f46e5; transform-origin: bottom right; transition: transform 0.2s ease-out;
 }
+.dark .hover-thick::after { background-color: #818cf8; }
 .hover-thick:hover::after { transform: scaleX(1); transform-origin: bottom left; }

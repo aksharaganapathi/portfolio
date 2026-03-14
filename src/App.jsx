@@ -1,9 +1,36 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Github, Mail, Bot, BrainCircuit, Activity, Sun, Moon, ArrowUpRight } from 'lucide-react';
+import { Github, Mail, Bot, BrainCircuit, Activity, Sun, Moon, ArrowUpRight, Languages } from 'lucide-react';
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 16 },
+  visible: (i = 0) => ({
+    opacity: 1, y: 0,
+    transition: { delay: i * 0.08, duration: 0.4, ease: 'easeOut' }
+  })
+};
+
+const SectionLabel = ({ label, number }) => (
+  <div className="flex items-center gap-3 mb-6">
+    <span className="text-xs font-mono font-bold text-indigo-500 dark:text-indigo-400 tracking-wider">{number}</span>
+    <div className="h-[1px] w-6 bg-indigo-400/40 dark:bg-indigo-500/30" />
+    <span className="text-xs font-bold uppercase tracking-[0.25em] text-slate-400 dark:text-slate-500">{label}</span>
+  </div>
+);
 
 const Portfolio = () => {
-  const [isDark, setIsDark] = useState(true);
+  const [isDark, setIsDark] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('theme');
+      if (saved) return saved === 'dark';
+      return window.matchMedia('(prefers-color-scheme: dark)').matches;
+    }
+    return false;
+  });
+
+  useEffect(() => {
+    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+  }, [isDark]);
 
   const getEmail = () => {
     const user = "aksharaganapathi1";
@@ -18,230 +45,194 @@ const Portfolio = () => {
   const experiences = [
     {
       company: "Amazon Web Services",
-      role: "Software Development Engineer Intern",
+      role: "SDE Intern",
       year: "2025",
-      desc: "Architected an automated safety system for RDS PostgreSQL to detect and prune unused replication slots. Eliminated critical log buildup across thousands of customer instances. Integrated custom CloudWatch metrics for real-time fleet observability.",
+      desc: "Architected an automated safety system for RDS PostgreSQL to detect and prune unused replication slots. Eliminated critical log buildup across thousands of customer instances.",
       tech: ["Java", "AWS RDS", "CloudWatch", "PostgreSQL"],
-      accent: "#FF9900"
+      color: "#FF9900"
     },
     {
       company: "Samsung Research America",
       role: "Network Testing Engineer",
       year: "2024",
-      desc: "Developed a native Android application to harvest WiFi and sensor telemetry. Engineered a Java-based simulation framework that reduced model testing latency by 25% for ML-driven location prediction.",
+      desc: "Developed a native Android application to harvest WiFi and sensor telemetry. Engineered a Java-based simulation framework that reduced model testing latency by 25%.",
       tech: ["Kotlin", "Android SDK", "Python", "Simulink"],
-      accent: "#6E8CF7"
+      color: "#1428A0"
     }
   ];
 
   const projects = [
     { 
+      title: "Kali (ಕಲಿ)", 
+      tag: "EdTech", 
+      desc: "A web app for learning the Kannada script through scaffolded decoding — mapping visual glyphs to sounds via interactive recognition, audio, and transcription exercises.",
+      icon: <Languages size={16} />,
+      theme: "bg-violet-50 text-violet-600 border-violet-200 dark:bg-violet-500/10 dark:text-violet-300 dark:border-violet-500/20"
+    },
+    { 
       title: "Autonomous Robotic Arm", 
       tag: "Robotics", 
-      tech: "ROS 2 • OpenCV • C++",
       desc: "Implemented a full pick-and-place control pipeline for an SO-101 robotic arm. Used AprilTags and OpenCV for pose estimation with millimeter precision.",
-      icon: <Bot size={18} />,
+      icon: <Bot size={16} />,
+      theme: "bg-blue-50 text-blue-600 border-blue-200 dark:bg-blue-500/10 dark:text-blue-300 dark:border-blue-500/20"
     },
     { 
       title: "ClarityAI", 
       tag: "GenAI", 
-      tech: "React • TypeScript • LLMs",
-      desc: "A full-stack study platform using RAG (Retrieval-Augmented Generation) to generate customized flashcards and context-aware feedback.",
-      icon: <BrainCircuit size={18} />,
+      desc: "A full-stack study platform using RAG to generate customized flashcards and context-aware feedback.",
+      icon: <BrainCircuit size={16} />,
+      theme: "bg-amber-50 text-amber-600 border-amber-200 dark:bg-amber-500/10 dark:text-amber-300 dark:border-amber-500/20"
     },
     { 
       title: "DrugRadar", 
       tag: "Cloud Architecture", 
-      tech: "AWS Textract • Node.js",
       desc: "Healthcare tool utilizing AWS OCR to parse prescription labels and cross-reference interaction databases to flag high-risk drug combinations.",
-      icon: <Activity size={18} />,
+      icon: <Activity size={16} />,
+      theme: "bg-emerald-50 text-emerald-600 border-emerald-200 dark:bg-emerald-500/10 dark:text-emerald-300 dark:border-emerald-500/20"
     }
   ];
 
-  const fadeIn = {
-    hidden: { opacity: 0, y: 20 },
-    show: (i = 0) => ({
-      opacity: 1, y: 0,
-      transition: { duration: 0.6, delay: i * 0.1, ease: [0.25, 0.46, 0.45, 0.94] }
-    })
-  };
-
   return (
     <div className={isDark ? 'dark' : ''}>
-      <div className="min-h-screen bg-neutral-50 dark:bg-[#0a0a0f] text-neutral-800 dark:text-neutral-200 transition-colors duration-500">
+      <div className="min-h-screen text-slate-900 dark:text-slate-200 transition-colors duration-300">
         <div className="mesh-bg" />
+        <div className="dot-grid" />
         
-        {/* ── NAV ── */}
-        <nav className="fixed top-0 left-0 w-full z-50 px-6 pt-5 flex justify-center pointer-events-none">
-          <motion.div 
-            initial={{ y: -20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="bg-white/70 dark:bg-neutral-900/70 backdrop-blur-2xl px-7 py-3 rounded-full flex items-center gap-7 text-[11px] font-semibold uppercase tracking-[0.15em] border border-neutral-200/60 dark:border-neutral-800/60 shadow-lg shadow-black/[0.03] dark:shadow-black/30 pointer-events-auto"
-          >
-            <a href="#about" className="text-neutral-500 dark:text-neutral-500 hover:text-neutral-900 dark:hover:text-white transition-colors">About</a>
-            <a href="#work" className="text-neutral-500 dark:text-neutral-500 hover:text-neutral-900 dark:hover:text-white transition-colors">Work</a>
-            <a href="#projects" className="text-neutral-500 dark:text-neutral-500 hover:text-neutral-900 dark:hover:text-white transition-colors">Projects</a>
-            <div className="w-px h-3.5 bg-neutral-200 dark:bg-neutral-800" />
-            <button onClick={() => setIsDark(!isDark)} className="text-neutral-500 dark:text-neutral-500 hover:text-neutral-900 dark:hover:text-white transition-colors">
-              {isDark ? <Sun size={14} /> : <Moon size={14} />}
-            </button>
-          </motion.div>
-        </nav>
+        {/* THEME TOGGLE — fixed top-right */}
+        <button 
+          onClick={() => setIsDark(!isDark)} 
+          className="fixed top-5 right-5 z-50 p-2.5 rounded-full bg-white/80 dark:bg-zinc-800/80 backdrop-blur-lg border border-slate-200 dark:border-zinc-700 shadow-lg text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors cursor-pointer"
+        >
+          {isDark ? <Sun size={16} /> : <Moon size={16} />}
+        </button>
 
-        {/* ── HERO ── */}
-        <section id="about" className="relative min-h-[78vh] flex flex-col justify-center px-8 md:px-20 max-w-5xl mx-auto pt-24 pb-8">
-          {/* Glow */}
-          <div className="hero-glow absolute -top-20 -left-32" />
+        {/* MAIN TWO-COLUMN LAYOUT */}
+        <div className="max-w-6xl mx-auto px-6 md:px-10 py-12 md:py-16">
+          <div className="flex flex-col md:flex-row gap-12 md:gap-16">
+            
+            {/* LEFT COLUMN — sticky bio */}
+            <motion.aside 
+              variants={fadeUp} initial="hidden" animate="visible"
+              className="md:w-[340px] md:shrink-0 md:sticky md:top-16 md:self-start"
+            >
+              <h1 className="text-4xl md:text-5xl font-bold tracking-tighter leading-[1] text-slate-900 dark:text-white mb-4">
+                Hi, I'm <br />Akshara.
+              </h1>
+              <p className="text-lg text-slate-500 dark:text-slate-400 leading-relaxed mb-4">
+                I develop <span className="bg-gradient-to-r from-indigo-600 to-violet-500 dark:from-indigo-400 dark:to-violet-400 bg-clip-text text-transparent font-semibold">intelligent systems.</span>
+              </p>
+              <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed mb-5">
+                Currently a <span className="text-slate-900 dark:text-white font-semibold">SDE</span> at <span className="text-slate-900 dark:text-white font-bold">AWS</span>, building infrastructure for <span className="font-medium italic underline decoration-amber-400/60 underline-offset-4 text-slate-700 dark:text-slate-300">Athena, Glue, and EMR</span>.
+              </p>
 
-          <motion.div
-            variants={fadeIn} custom={0} initial="hidden" animate="show"
-            className="mb-6"
-          >
-            <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[11px] font-semibold tracking-wider uppercase border border-teal-500/20 dark:border-teal-500/15 text-teal-700 dark:text-teal-400 bg-teal-50 dark:bg-teal-500/[0.07]">
-              <span className="w-1.5 h-1.5 rounded-full bg-teal-500 animate-pulse" />
-              Software Engineer
-            </span>
-          </motion.div>
+              <div className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed pl-4 border-l-2 border-indigo-400/30 dark:border-indigo-500/30 mb-8">
+                <p>
+                  I'm a software engineer from Texas. I enjoy building software to solve problems for people and improve their daily lives. I'm currently exploring the intersection of LLMs, OS, and distributed systems.
+                </p>
+              </div>
 
-          <motion.h1 
-            variants={fadeIn} custom={1} initial="hidden" animate="show"
-            className="text-[clamp(2.2rem,6vw,4.5rem)] font-extrabold leading-[1.05] tracking-tight text-neutral-900 dark:text-white mb-7"
-          >
-            Hi, I'm Akshara. <br />
-            I build things that{' '}
-            <span className="bg-gradient-to-r from-teal-500 to-cyan-500 bg-clip-text text-transparent">
-              think.
-            </span>
-          </motion.h1>
+              {/* Quick links */}
+              <div className="flex items-center gap-3">
+                <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="p-2.5 rounded-xl bg-white/70 dark:bg-zinc-800/50 border border-slate-200/70 dark:border-zinc-700/50 text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
+                  <Github size={18} />
+                </a>
+                <button onClick={handleContact} className="p-2.5 rounded-xl bg-white/70 dark:bg-zinc-800/50 border border-slate-200/70 dark:border-zinc-700/50 text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors cursor-pointer">
+                  <Mail size={18} />
+                </button>
+              </div>
+            </motion.aside>
 
-          <motion.div 
-            variants={fadeIn} custom={2} initial="hidden" animate="show"
-            className="text-base md:text-lg text-neutral-500 dark:text-neutral-400 leading-relaxed max-w-xl"
-          >
-            <p className="mb-3">
-              Currently a{' '}
-              <span className="text-neutral-900 dark:text-white font-semibold">Software Development Engineer</span> at{' '}
-              <span className="text-neutral-900 dark:text-white font-bold">AWS</span>
-              , building data infrastructure for{' '}
-              <span className="text-neutral-900 dark:text-white font-medium">Athena, Glue, and EMR</span>.
-            </p>
-          </motion.div>
-        </section>
-
-        {/* ── EXPERIENCE ── */}
-        <section id="work" className="px-8 md:px-20 max-w-5xl mx-auto py-14">
-          <motion.div 
-            variants={fadeIn} initial="hidden" whileInView="show" viewport={{ once: true }}
-            className="flex items-center gap-4 mb-8"
-          >
-            <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-neutral-400 dark:text-neutral-600">Experience</h2>
-            <div className="flex-1 h-px bg-neutral-200 dark:bg-neutral-800" />
-          </motion.div>
-
-          <div className="space-y-4">
-            {experiences.map((job, i) => (
-              <motion.div
-                key={i}
-                variants={fadeIn} custom={i} initial="hidden" whileInView="show"
-                viewport={{ once: true, amount: 0.3 }}
-                className="group p-6 md:p-7 rounded-xl bg-white/50 dark:bg-neutral-900/50 border border-neutral-200/70 dark:border-neutral-800/70 backdrop-blur-sm hover:border-neutral-300 dark:hover:border-neutral-700 transition-colors duration-300"
-              >
-                <div className="flex items-start justify-between mb-2">
-                  <div className="flex items-center gap-3">
-                    <span
-                      className="w-2 h-2 rounded-full shrink-0"
-                      style={{ backgroundColor: job.accent }}
-                    />
-                    <h3 className="text-lg md:text-xl font-bold tracking-tight text-neutral-900 dark:text-white">{job.company}</h3>
-                  </div>
-                  <span className="text-[11px] font-mono text-neutral-400 dark:text-neutral-600 pt-1 shrink-0 ml-4">{job.year}</span>
-                </div>
-                <p className="text-sm font-medium text-neutral-500 dark:text-neutral-400 mb-3 ml-5">{job.role}</p>
-                <p className="text-sm text-neutral-500 dark:text-neutral-500 leading-[1.7] mb-4 ml-5">{job.desc}</p>
-                <div className="flex flex-wrap gap-1.5 ml-5">
-                  {job.tech.map(t => (
-                    <span 
-                      key={t} 
-                      className="px-2 py-0.5 text-[10px] font-semibold uppercase font-mono rounded-md bg-neutral-100 dark:bg-neutral-800 text-neutral-500 dark:text-neutral-500"
+            {/* RIGHT COLUMN — scrollable content */}
+            <main className="flex-1 min-w-0">
+              
+              {/* EXPERIENCE */}
+              <section className="mb-14">
+                <SectionLabel label="Experience" number="01" />
+                <div className="space-y-4">
+                  {experiences.map((job, i) => (
+                    <motion.div
+                      key={i}
+                      variants={fadeUp}
+                      initial="hidden"
+                      whileInView="visible"
+                      viewport={{ once: true, amount: 0.3 }}
+                      custom={i}
+                      className="group p-5 rounded-xl bg-white/60 dark:bg-zinc-800/50 border border-slate-200/70 dark:border-zinc-700/50 hover:border-slate-300 dark:hover:border-zinc-600 transition-all hover:shadow-md"
                     >
-                      {t}
-                    </span>
+                      <div className="flex items-start justify-between gap-3 mb-2">
+                        <motion.h3 
+                          initial={{ color: isDark ? "#52525b" : "#cbd5e1" }}
+                          whileInView={{ color: job.color }}
+                          viewport={{ amount: 0.5 }}
+                          transition={{ duration: 0.6 }}
+                          className="text-2xl font-bold tracking-tight leading-none"
+                        >
+                          {job.company}
+                        </motion.h3>
+                        <span className="text-xs text-slate-400 dark:text-zinc-500 font-mono shrink-0">{job.year}</span>
+                      </div>
+                      <p className="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">{job.role}</p>
+                      <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed mb-3">{job.desc}</p>
+                      <div className="flex flex-wrap gap-1.5">
+                        {job.tech.map(t => (
+                          <span key={t} className="px-2 py-0.5 bg-slate-100 dark:bg-zinc-700/60 text-slate-500 dark:text-slate-400 rounded-md text-[10px] font-bold uppercase font-mono">{t}</span>
+                        ))}
+                      </div>
+                    </motion.div>
                   ))}
                 </div>
-              </motion.div>
-            ))}
-          </div>
-        </section>
+              </section>
 
-        {/* ── PROJECTS ── */}
-        <section id="projects" className="px-8 md:px-20 max-w-5xl mx-auto py-14">
-          <motion.div 
-            variants={fadeIn} initial="hidden" whileInView="show" viewport={{ once: true }}
-            className="flex items-center gap-4 mb-8"
-          >
-            <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-neutral-400 dark:text-neutral-600">Projects</h2>
-            <div className="flex-1 h-px bg-neutral-200 dark:bg-neutral-800" />
-          </motion.div>
-
-          <div className="grid md:grid-cols-3 gap-4">
-            {projects.map((p, i) => (
-              <motion.div 
-                key={i}
-                variants={fadeIn} custom={i} initial="hidden" whileInView="show"
-                viewport={{ once: true }}
-                whileHover={{ y: -4 }}
-                transition={{ type: "spring", stiffness: 400, damping: 25 }}
-                className="group relative p-5 rounded-xl bg-white/50 dark:bg-neutral-900/50 border border-neutral-200/70 dark:border-neutral-800/70 backdrop-blur-sm hover:border-teal-300/60 dark:hover:border-teal-500/25 transition-all duration-300 cursor-default"
-              >
-                <div className="flex items-center justify-between mb-3">
-                  <span className="text-teal-600 dark:text-teal-400">{p.icon}</span>
-                  <span className="text-[9px] font-semibold uppercase tracking-widest text-neutral-400 dark:text-neutral-600">{p.tag}</span>
+              {/* PROJECTS */}
+              <section>
+                <SectionLabel label="Projects" number="02" />
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {projects.map((p, i) => (
+                    <motion.div
+                      key={i}
+                      variants={fadeUp}
+                      initial="hidden"
+                      whileInView="visible"
+                      viewport={{ once: true, amount: 0.3 }}
+                      custom={i}
+                      whileHover={{ y: -3 }}
+                      className="group p-5 bg-white/70 dark:bg-zinc-800/50 border border-slate-200/70 dark:border-zinc-700/50 rounded-xl hover:border-slate-300 dark:hover:border-zinc-600 hover:shadow-md transition-all"
+                    >
+                      <div className="flex justify-between items-start mb-3">
+                        <div className={`p-2 rounded-lg border ${p.theme}`}>{p.icon}</div>
+                        <span className="text-[9px] font-mono font-bold uppercase text-slate-400 dark:text-slate-500 tracking-widest">{p.tag}</span>
+                      </div>
+                      <h4 className="text-base font-bold tracking-tight text-slate-900 dark:text-white mb-1.5">{p.title}</h4>
+                      <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed mb-4">{p.desc}</p>
+                      <div className="pt-3 border-t border-slate-100 dark:border-zinc-700/50">
+                        <a href="#" className="inline-flex items-center gap-1.5 text-xs font-bold uppercase text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors group/link">
+                          Source Code <ArrowUpRight size={12} className="group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5 transition-transform" />
+                        </a>
+                      </div>
+                    </motion.div>
+                  ))}
                 </div>
-                <h4 className="text-base font-bold tracking-tight text-neutral-900 dark:text-white mb-1.5">{p.title}</h4>
-                <p className="text-[13px] text-neutral-500 dark:text-neutral-500 leading-relaxed mb-3">{p.desc}</p>
-                <div className="pt-3 border-t border-neutral-100 dark:border-neutral-800">
-                  <span className="text-[10px] font-mono text-neutral-400 dark:text-neutral-600">{p.tech}</span>
-                </div>
-              </motion.div>
-            ))}
+              </section>
+            </main>
           </div>
-        </section>
+        </div>
 
-        {/* ── FOOTER ── */}
-        <footer className="px-8 md:px-20 max-w-5xl mx-auto py-10">
-          <motion.div 
-            variants={fadeIn} initial="hidden" whileInView="show" viewport={{ once: true }}
-            className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 pt-8 border-t border-neutral-200/60 dark:border-neutral-800/60"
-          >
-            <div>
-              <h2 className="text-xl font-bold tracking-tight text-neutral-900 dark:text-white mb-1">
-                Get in touch
-              </h2>
-              <p className="text-sm text-neutral-400 dark:text-neutral-600">Open to opportunities and collaborations.</p>
-            </div>
-            <div className="flex items-center gap-2">
-              <button 
-                onClick={handleContact}
-                className="group px-4 py-2.5 bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 rounded-lg font-semibold flex items-center gap-2 hover:scale-[1.02] active:scale-[0.98] transition-transform text-sm"
-              >
-                <Mail size={15} /> 
-                <span className="font-mono text-xs">{getEmail()}</span>
-                <ArrowUpRight size={13} className="opacity-50 group-hover:opacity-100 transition-opacity" />
-              </button>
-              <a 
-                href="https://github.com/aksharaganapathi" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="p-2.5 rounded-lg border border-neutral-200 dark:border-neutral-800 text-neutral-500 dark:text-neutral-500 hover:text-neutral-900 dark:hover:text-white hover:border-neutral-400 dark:hover:border-neutral-600 transition-all"
-              >
-                <Github size={16} />
-              </a>
-            </div>
-          </motion.div>
-          <p className="text-[11px] text-neutral-300 dark:text-neutral-800 mt-6">© {new Date().getFullYear()} Akshara Ganapathi</p>
+        {/* FOOTER */}
+        <footer className="px-6 md:px-10 pb-10 max-w-6xl mx-auto">
+          <div className="p-6 rounded-2xl bg-gradient-to-br from-indigo-50 to-violet-50 dark:from-indigo-950/30 dark:to-violet-950/20 border border-indigo-100 dark:border-indigo-900/30 flex flex-col sm:flex-row justify-between items-center gap-5">
+            <h2 className="text-3xl md:text-4xl font-bold tracking-tighter text-slate-900 dark:text-white">
+              Let's <span className="italic bg-gradient-to-r from-indigo-600 to-violet-500 dark:from-indigo-400 dark:to-violet-400 bg-clip-text text-transparent">Connect.</span>
+            </h2>
+            <button 
+              onClick={handleContact}
+              className="px-5 py-3 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-xl font-bold flex items-center gap-2.5 hover:scale-[1.03] transition-transform cursor-pointer text-sm"
+            >
+              <Mail size={16} /> 
+              <span className="font-mono text-sm">{getEmail()}</span>
+            </button>
+          </div>
+          <p className="text-center text-[10px] text-slate-400 dark:text-slate-600 mt-4 font-mono">© {new Date().getFullYear()} Akshara Ganapathi</p>
         </footer>
-
       </div>
     </div>
   );

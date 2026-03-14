@@ -1,25 +1,18 @@
-/** @type {import('tailwindcss').Config} */
-export default {
-  // 1. THIS LINE FIXES THE WHITE TEXT ISSUE
-  darkMode: 'class', 
-  
-  content: [
-    "./index.html",
-    "./src/**/*.{js,ts,jsx,tsx}",
-  ],
+module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Inter', 'sans-serif'],
-        mono: ['JetBrains Mono', 'monospace'],
+        sans: ['Outfit', 'system-ui', 'sans-serif'],
       },
-      colors: {
-        accent: '#4f46e5',      // Indigo
-        accentLight: '#e0e7ff', // Light Indigo
-        ink: '#0f172a',         // Deep Slate
-        paper: '#f8fafc',       // Slate-50
-      }
+      animation: {
+        'fade-in': 'fadeIn 1s ease-out forwards',
+      },
+      keyframes: {
+        fadeIn: {
+          '0%': { opacity: '0', transform: 'translateY(10px)' },
+          '100%': { opacity: '1', transform: 'translateY(0)' },
+        },
+      },
     },
   },
-  plugins: [],
 }
